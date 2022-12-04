@@ -3,7 +3,10 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
+#include "FluidSim2D.h"
 #include "shader.h"
+
+#include <chrono>
 
 void ProcessInput(GLFWwindow* window)
 {
@@ -105,35 +108,10 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    struct Color {
-        unsigned char r;
-        unsigned char g;
-        unsigned char b;
-        unsigned char a;
-    };
+    FluidSim2D sim(100, 100);
+    Texture fluidTexture(sim.GetWidth(), sim.GetHeight());
 
-    struct Image {
-        int width;
-        int height;
-        Color *data;
-
-        Image(int width, int height)
-        {
-            this->width = width;
-            this->height = height;
-            this->data = (Color*)calloc(width * height, sizeof(Color));
-        }
-    };
-
-    Image image(5, 5);
-    for (int index = 0; index < image.width * image.height; index++)
-    {
-        image.data[index] = { (unsigned char)(index / (1.f + image.width*image.height) * 255), 0, 0 };
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data);
-    glCheckError();
-    glGenerateMipmap(GL_TEXTURE_2D);
+    std::chrono::time_point<std::chrono::system_clock> last_time = std::chrono::system_clock::now();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -141,6 +119,13 @@ int main()
 
         glClearColor(1.00f, 0.49f, 0.04f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        std::chrono::time_point<std::chrono::system_clock> new_time = std::chrono::system_clock::now();
+        float dt = (new_time - last_time).count();
+        sim.Step(dt);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fluidTexture.width, fluidTexture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, sim.GetTextureData());
+        glGenerateMipmap(GL_TEXTURE_2D);
 
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

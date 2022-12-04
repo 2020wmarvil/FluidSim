@@ -39,6 +39,7 @@ set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(sources 
     ${SOURCE_DIR}/main.cpp 
     ${SOURCE_DIR}/shader.h
+    ${SOURCE_DIR}/FluidSim2D.h 
     ${SOURCE_DIR}/glad/glad.c 
     ${SOURCE_DIR}/glad/glad.h
 )
