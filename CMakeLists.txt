@@ -42,6 +42,20 @@ set(sources
     ${SOURCE_DIR}/FluidSim2D.h 
     ${SOURCE_DIR}/glad/glad.c 
     ${SOURCE_DIR}/glad/glad.h
+
+    ${SOURCE_DIR}/imgui/imgui.h
+    ${SOURCE_DIR}/imgui/imgui.cpp
+    ${SOURCE_DIR}/imgui/imconfig.h
+    ${SOURCE_DIR}/imgui/imgui_demo.cpp
+    ${SOURCE_DIR}/imgui/imgui_draw.cpp
+    ${SOURCE_DIR}/imgui/imgui_tables.cpp
+    ${SOURCE_DIR}/imgui/imgui_widgets.cpp
+
+    ${SOURCE_DIR}/imgui/imgui_impl_glfw.h
+    ${SOURCE_DIR}/imgui/imgui_impl_glfw.cpp
+    ${SOURCE_DIR}/imgui/imgui_impl_opengl3.h
+    ${SOURCE_DIR}/imgui/imgui_impl_opengl3_loader.h
+    ${SOURCE_DIR}/imgui/imgui_impl_opengl3.cpp
 )
 
 add_executable(opengl-template ${sources} ${includes})
